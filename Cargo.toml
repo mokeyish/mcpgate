@@ -1,0 +1,75 @@
+[package]
+name = "mcpgate"
+version = "0.1.0"
+edition = "2024"
+authors = ["YISH <mokeyish@hotmail.com>"]
+
+description = """
+⚡ Blazing-fast MCP gateway written in Rust. Experience unparalleled speed & performance! 🚀
+"""
+
+[features]
+default = []
+
+[dependencies]
+
+rmcp = { version = "0.1.5", git = "https://github.com/mokeyish/rust-sdk.git", rev = "51dceaf",  features = [
+    "server", "client",
+    "auth",
+    "transport-sse-server",
+    "transport-io",
+    "transport-worker",
+    "transport-sse-client",
+    "transport-sse-server",
+    "transport-child-process",
+    "transport-streamable-http-server",
+    "transport-streamable-http-client"
+] }
+
+clap =  { version = "4.5", features = ["derive"] }
+notify = "8.0.0"
+notify-debouncer-mini = "0.6.0"
+
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+schemars = { version = "0.8", optional = true }
+
+
+# for SSE client
+reqwest = { version = "0.12", default-features = false, features = [
+    "json",
+    "stream",
+]}
+
+# web
+axum = { version = "0.8", features = ["macros"] }
+tower = "0.5.2"
+tower-http = { version = "0.6.4", features = ["cors"]}
+http = { version = "1.3.1" }
+
+# aynsc/await
+
+tokio = { version = "1", features = ["macros", "rt", "rt-multi-thread", "io-std", "signal", "process"] }
+tokio-util = { version = "0.7" }
+
+# error
+anyhow = "1.0"
+
+
+# logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = [
+    "env-filter",
+    "std",
+    "fmt",
+] }
+thiserror = "2.0.12"
+
+
+
+[profile.release]
+# see: https://github.com/johnthagen/min-sized-rust
+strip = true    # Automatically strip symbols from the binary.
+opt-level = "z" # Optimize for size.
+lto = true
+codegen-units = 1
